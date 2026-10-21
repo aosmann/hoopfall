@@ -372,6 +372,8 @@ const DIFFHINT={1:'Easy: big hoops that stay still.',2:'Medium: smaller hoops at
    lock=1 (class mode): no replay, no topic menu. Posts edu-ready on load, edu-progress after every answer, edu-result at the end. */
 const EMBED=(()=>{const p=new URLSearchParams(location.search);if(!p.get('topic'))return null;
   return{topic:p.get('topic'),level:+p.get('level')||0,time:+p.get('time')||0,lock:p.get('lock')==='1'}})();
+/* continents from the portal (class mode); no regions param = all continents */
+const EMBED_REG=EMBED?(EduQ.parseRegions?EduQ.parseRegions(new URLSearchParams(location.search).get('regions'))||EduQ.REGIONS.map(r=>r.id):null):null;
 const toParent=m=>{try{if(window.parent!==window)window.parent.postMessage(m,'*')}catch(e){}};
 
 /* ======================= SETTINGS ======================= */
@@ -400,9 +402,10 @@ function renderSubjects(){const box=$('subjects');box.innerHTML='';
 function renderTopics(){const s=curSubject(),t=curTopic();cfg.topic=t.id;$('subName').textContent=s.name;
   const box=$('topics');box.innerHTML='';box.style.setProperty('--h',SHUE[s.id]||'#ff6a3d');
   s.topics.forEach(tp=>{const b=el('button','row');b.type='button';b.setAttribute('aria-pressed',tp.id===cfg.topic);
-    const tx=el('span','tx');tx.append(el('strong',null,tp.name),el('span',null,tp.bl));
+    const tx=el('span','tx');tx.append(el('strong',null,tp.name),el('span',null,tp.regions&&EduQ.regionLabel?EduQ.regionLabel(EduQ.getRegions(tp.id)):tp.bl));
     const side=el('span');const bs=getBest(tp.id,topicDiff(tp));if(bs)side.append(el('span','best',`${bs} pts`));
     b.append(el('span','radio'),tx,side);b.onclick=()=>{cfg.topic=tp.id;saveCfg();renderTopics()};box.append(b)});
+  {const old=document.getElementById('regPick');if(old)old.remove();const pk=EduQ.regionPicker&&EduQ.regionPicker(t,{onChange:renderTopics});if(pk){pk.id='regPick';box.after(pk)}}
   $('startBtn').textContent=`Start · ${t.name}`;
   document.querySelectorAll('#diffSeg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.d===DIFF()));
   document.querySelectorAll('#timeSeg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.t===cfg.time));$('diffHint').textContent=DIFFHINT[DIFF()]}
@@ -711,7 +714,7 @@ function clockDelta(txt){const d=$('clockD');d.textContent=txt;d.className='';vo
 function reset(){parts=[];pops=[];score=0;right=0;asked=0;streak=0;bestStreak=0;lives=3;missed=[];beat=false;served=0;swishes=0;airballs=0;shots=0;ending=false;servedLog.length=0;
   timeLeft=cfg.time;played=0;lastSec=Math.ceil(timeLeft);best=getBest();phase='aim';cur=null;$('clockD').className='';$('qbox').innerHTML='';show('qbox',false);show('coach',false);
   hoops.forEach(h=>{h.ans='';h.right=false;h.lab=null;h.red=0;h.green=0;h.next=null;h.flip=1});restBall();paintHud();paintClock()}
-function start(){layout(DIFF());reset();next=stream(curTopic(),DIFF());panel(null);show('hud',true);
+function start(){layout(DIFF());reset();next=stream(curTopic(),DIFF(),EMBED_REG?{regions:EMBED_REG}:undefined);panel(null);show('hud',true);
   state='count';countT=3.2;show('count',true);tickCount(3);paintAudio();nextQuestion(true)}
 function tickCount(n){const c=$('countN');c.textContent=n||'Shoot!';c.classList.remove('tick');void c.offsetWidth;c.classList.add('tick');S.tick(n)}
 

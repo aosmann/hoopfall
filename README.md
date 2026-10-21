@@ -28,3 +28,8 @@ Plain canvas 2D (pseudo-3D court, real arc with gravity, rim and backboard bounc
 Follows the EduGames game contract v1: `?topic=<id>&level=1-3&time=60|90|120&lock=1` starts a run at once; posts `edu-ready`, `edu-progress` after every answer and `edu-result` at the end (also kept in `localStorage['edu-results']`). The result adds `swishes`, `livesLeft`, `timeUsed` (seconds played), `time`, `airballs`, `shots` and `cause` (`time` / `lives` / `done` / `quit`); `missed[].picked` is the answer on the hoop the ball went through.
 
 `?debug=1` exposes a read-only `window.HF` hook used by the automated tests.
+
+## Credits
+
+Country, capital and continent data: [mledoze/countries](https://github.com/mledoze/countries), Open Database License (ODbL 1.0).  
+Flags: [flag-icons](https://github.com/lipis/flag-icons), MIT licence, compressed into `flags/`.
