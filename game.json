@@ -9,7 +9,58 @@
   "bank": "EduQ",
   "score": "points",
   "settings": [
-    {"key": "level", "label": "Difficulty", "options": [[1, "Easy"], [2, "Medium"], [3, "Hard"]], "default": "topic"},
-    {"key": "time", "label": "Time", "options": [[60, "60 sec"], [90, "90 sec"], [120, "120 sec"]], "default": 90}
+    {
+      "key": "level",
+      "label": "Difficulty",
+      "options": [
+        [
+          1,
+          "Easy"
+        ],
+        [
+          2,
+          "Medium"
+        ],
+        [
+          3,
+          "Hard"
+        ]
+      ],
+      "default": "topic"
+    },
+    {
+      "key": "time",
+      "label": "Time",
+      "options": [
+        [
+          60,
+          "60 sec"
+        ],
+        [
+          90,
+          "90 sec"
+        ],
+        [
+          120,
+          "120 sec"
+        ]
+      ],
+      "default": 90,
+      "custom": {
+        "label": "Custom",
+        "format": "{t}",
+        "fields": [
+          {
+            "key": "t",
+            "label": "Time",
+            "unit": "s",
+            "min": 20,
+            "max": 600,
+            "step": 10,
+            "default": 150
+          }
+        ]
+      }
+    }
   ]
 }
